@@ -10,7 +10,7 @@ public class BuyerOrder {
     private int orderId;
     private String buyerName;
     private String productName;
-    private int quantity;
+    private int quantity;  
     private Date orderDate;
 
     public BuyerOrder() {
