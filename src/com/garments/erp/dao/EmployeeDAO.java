@@ -18,10 +18,10 @@ public class EmployeeDAO {
               String sql = "INSERT INTO employee VALUES (?,?,?,?)";
                PreparedStatement ps = con.prepareStatement(sql);
                 ps.setInt(1, emp.getEmpId());
-                ps.setString(2, emp.getEmpName());
-                ps.setString(3, emp.getDepartment());
-                ps.setDouble(4, emp.getSalary());
-                ps.executeUpdate();
+                 ps.setString(2, emp.getEmpName());
+                  ps.setString(3, emp.getDepartment());
+                   ps.setDouble(4, emp.getSalary());
+                    ps.executeUpdate();
                  
                  System.out.println("Employee added succesfully");
         } catch (Exception e) {
