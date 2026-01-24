@@ -101,7 +101,7 @@ public class BuyerOrderForm extends javax.swing.JFrame {
             }
         });
 
-        btnSave.setBackground(new java.awt.Color(0, 51, 204));
+        btnSave.setBackground(new java.awt.Color(0, 102, 204));
         btnSave.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -110,7 +110,7 @@ public class BuyerOrderForm extends javax.swing.JFrame {
             }
         });
 
-        btnUpdate.setBackground(new java.awt.Color(0, 51, 204));
+        btnUpdate.setBackground(new java.awt.Color(0, 102, 204));
         btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -119,7 +119,7 @@ public class BuyerOrderForm extends javax.swing.JFrame {
             }
         });
 
-        btnDelete.setBackground(new java.awt.Color(0, 51, 204));
+        btnDelete.setBackground(new java.awt.Color(0, 102, 204));
         btnDelete.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnDelete.setText("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
