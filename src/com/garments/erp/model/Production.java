@@ -1,9 +1,5 @@
 package com.garments.erp.model;
 
-/**
- *
- * @author TASRIF ZAMAN
- */
 public class Production {
     private int productionId;
     private int orderId;

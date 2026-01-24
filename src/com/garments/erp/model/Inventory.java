@@ -1,9 +1,5 @@
 package com.garments.erp.model;
 
-/**
- *
- * @author TASRIF ZAMAN
- */
 public class Inventory {
    private int iteamId;
    private String iteamName;
