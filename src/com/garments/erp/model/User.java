@@ -1,23 +1,17 @@
 package com.garments.erp.model;
 
 public class User {
-    private int userId;
     private String username;
     private String password;
 
-    public User() {}
 
-    public User(int userId, String username, String password) {
-        this.userId = userId;
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public User() {
+        
     }
     public String getUsername() {
         return username;
