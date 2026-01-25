@@ -1,7 +1,6 @@
 # Garments ERP System (Desktop Application)
 
-Garments ERP System is a Java Swing–based desktop application developed using NetBeans.  
-The system is designed to manage core operational activities of a garments business through a secure, user-friendly, and modular interface.
+Garments ERP System is a Java Swing–based desktop application developed using NetBeans.  The system is designed to manage core operational activities of a garments business through a secure, user-friendly, and modular interface.
 
 ## Key Features
 
