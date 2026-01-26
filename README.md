@@ -1,7 +1,6 @@
 # Garments ERP System
 
-A Java Swing–based desktop application developed with NetBeans to manage core operations of a garments business.  
-The system provides user authentication, employee and order management, basic production tracking, and inventory management using a MySQL database via JDBC.
+A Java Swing–based desktop application developed with NetBeans to manage core operations of a garments business.The system provides user authentication, employee and order management, basic production tracking, and inventory management using a MySQL database via JDBC.
 
 ## Key Features
 - User authentication (Login & Registration)
