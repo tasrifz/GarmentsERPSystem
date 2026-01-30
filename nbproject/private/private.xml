@@ -9,6 +9,13 @@
             <file>file:/E:/GarmentsERPSystem/src/com/garments/erp/model/BuyerOrder.java</file>
             <file>file:/E:/GarmentsERPSystem/src/com/garments/erp/dao/BuyerOrderDAO.java</file>
             <file>file:/E:/GarmentsERPSystem/src/com/garments/erp/ui/BuyerOrderForm.java</file>
+            <file>file:/D:/Java/JAVA/GarmentsERPSystem/src/com/garments/erp/ui/BuyerOrderForm.java</file>
+            <file>file:/D:/Java/JAVA/GarmentsERPSystem/src/com/garments/erp/ui/DashboardForm.java</file>
+            <file>file:/D:/Java/JAVA/GarmentsERPSystem/src/com/garments/erp/ui/ProductionForm.java</file>
+            <file>file:/D:/Java/JAVA/GarmentsERPSystem/src/com/garments/erp/ui/LogInForm.java</file>
+            <file>file:/D:/Java/JAVA/GarmentsERPSystem/src/com/garments/erp/ui/RegisterForm.java</file>
+            <file>file:/D:/Java/JAVA/GarmentsERPSystem/src/com/garments/erp/ui/InventoryForm.java</file>
+            <file>file:/D:/Java/JAVA/GarmentsERPSystem/src/com/garments/erp/ui/EmployeeForm.java</file>
         </group>
     </open-files>
 </project-private>

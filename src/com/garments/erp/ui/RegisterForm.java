@@ -45,6 +45,7 @@ public class RegisterForm extends javax.swing.JFrame {
 
         jLabel3.setText("Confirm Password");
 
+        btnRegister.setBackground(new java.awt.Color(0, 51, 204));
         btnRegister.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnRegister.setText("Register");
         btnRegister.addActionListener(new java.awt.event.ActionListener() {

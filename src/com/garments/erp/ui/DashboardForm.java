@@ -30,6 +30,7 @@ public class DashboardForm extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("     DashBoard Garments ERP System");
 
+        btnEmployee.setBackground(new java.awt.Color(0, 102, 255));
         btnEmployee.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnEmployee.setText("Employee");
         btnEmployee.addActionListener(new java.awt.event.ActionListener() {
@@ -38,6 +39,7 @@ public class DashboardForm extends javax.swing.JFrame {
             }
         });
 
+        btnBuyerOrder.setBackground(new java.awt.Color(0, 102, 255));
         btnBuyerOrder.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnBuyerOrder.setText("Buyer Order");
         btnBuyerOrder.addActionListener(new java.awt.event.ActionListener() {
@@ -46,6 +48,7 @@ public class DashboardForm extends javax.swing.JFrame {
             }
         });
 
+        btnProduction.setBackground(new java.awt.Color(0, 102, 255));
         btnProduction.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnProduction.setText("Production");
         btnProduction.addActionListener(new java.awt.event.ActionListener() {
@@ -54,6 +57,7 @@ public class DashboardForm extends javax.swing.JFrame {
             }
         });
 
+        btnInventory.setBackground(new java.awt.Color(0, 102, 255));
         btnInventory.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnInventory.setText("Inventory");
         btnInventory.addActionListener(new java.awt.event.ActionListener() {
@@ -62,6 +66,7 @@ public class DashboardForm extends javax.swing.JFrame {
             }
         });
 
+        btnLogOut.setBackground(new java.awt.Color(0, 51, 204));
         btnLogOut.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnLogOut.setText("Log Out");
         btnLogOut.addActionListener(new java.awt.event.ActionListener() {
