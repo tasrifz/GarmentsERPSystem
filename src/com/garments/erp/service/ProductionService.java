@@ -2,6 +2,7 @@ package com.garments.erp.service;
 
 import com.garments.erp.dao.ProductionDAO;
 import com.garments.erp.model.Production;
+import java.util.List;
 
 public class ProductionService {
 
@@ -19,5 +20,14 @@ public class ProductionService {
     public boolean deleteProduction(int id) {
         return dao.delete(id);
     }
+
+    public Production searchProductionById(int id) {
+        return dao.getById(id);
+    }
+
+    public List<Production> getAllProductions() {
+        return dao.getAll();
+    }
 }
+
 

@@ -2,15 +2,17 @@ package com.garments.erp.dao;
 
 import com.garments.erp.model.Inventory;
 import com.garments.erp.util.DBConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InventoryDAO {
-  // ::::::::::::::: Save Inventory::::::::::::::
+
+    // Save
     public boolean save(Inventory i) {
         try {
             Connection con = DBConnection.getConnection();
-            String sql = "INSERT INTO inventory VALUES (?,?,?,?)";
+            String sql = "INSERT INTO inventory(item_id, item_name, quantity, type) VALUES (?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, i.getIteamId());
             ps.setString(2, i.getIteamName());
@@ -21,7 +23,8 @@ public class InventoryDAO {
             return false;
         }
     }
-    // ::::::::::::::: Update Inventory::::::::::::::
+
+    // Update (BY ID)
     public boolean update(Inventory i) {
         try {
             Connection con = DBConnection.getConnection();
@@ -36,7 +39,8 @@ public class InventoryDAO {
             return false;
         }
     }
-    // // ::::::::::::::: Delete Inventory::::::::::::::
+
+    // Delete
     public boolean delete(int id) {
         try {
             Connection con = DBConnection.getConnection();
@@ -48,5 +52,45 @@ public class InventoryDAO {
             return false;
         }
     }
+
+    
+    public List<Inventory> getAll() {
+        List<Inventory> list = new ArrayList<>();
+        try {
+            Connection con = DBConnection.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM inventory");
+            while (rs.next()) {
+                Inventory i = new Inventory();
+                i.setIteamId(rs.getInt("item_id"));
+                i.setIteamName(rs.getString("item_name"));
+                i.setQuantity(rs.getInt("quantity"));
+                i.setType(rs.getString("type"));
+                list.add(i);
+            }
+        } catch (Exception e) {}
+        return list;
+    }
+
+    
+    public Inventory searchInventoryById(int id) {
+        try {
+            Connection con = DBConnection.getConnection();
+            String sql = "SELECT * FROM inventory WHERE item_id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Inventory i = new Inventory();
+                i.setIteamId(rs.getInt("item_id"));
+                i.setIteamName(rs.getString("item_name"));
+                i.setQuantity(rs.getInt("quantity"));
+                i.setType(rs.getString("type"));
+                return i;
+            }
+        } catch (Exception e) {}
+        return null;
+    }
 }
+
 

@@ -5,15 +5,14 @@ import com.garments.erp.model.BuyerOrder;
 import java.util.List;
 
 public class BuyerOrderService {
+
     private BuyerOrderDAO dao = new BuyerOrderDAO();
 
     public boolean addOrder(BuyerOrder order) {
-        if (order.getQuantity() <= 0) return false;
         return dao.addOrder(order);
     }
 
     public boolean updateOrder(BuyerOrder order) {
-        if (order.getQuantity() <= 0) return false;
         return dao.updateOrder(order);
     }
 
@@ -21,8 +20,7 @@ public class BuyerOrderService {
         return dao.deleteOrder(orderId);
     }
 
-    public List<BuyerOrder> getOrders() {
+    public List<BuyerOrder> viewOrders() {
         return dao.getAllOrders();
     }
 }
-

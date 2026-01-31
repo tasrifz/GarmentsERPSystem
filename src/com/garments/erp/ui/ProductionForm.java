@@ -1,13 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.garments.erp.ui;
 
 import com.garments.erp.model.Production;
 import com.garments.erp.service.ProductionService;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -15,11 +13,12 @@ import javax.swing.JOptionPane;
  */
 public class ProductionForm extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ProductionForm
-     */
+    DefaultTableModel model;
+    ProductionService service = new ProductionService();
     public ProductionForm() {
         initComponents();
+        model = (DefaultTableModel) ProductionTable.getModel();
+        loadOrderTable();
     }
 
     /**
@@ -44,6 +43,10 @@ public class ProductionForm extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        BtnShowAllProduction = new javax.swing.JButton();
+        BtnSearch = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        ProductionTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -61,6 +64,12 @@ public class ProductionForm extends javax.swing.JFrame {
         });
 
         jLabel4.setText("Production Quantity");
+
+        txtQuantity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtQuantityActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Status");
 
@@ -99,14 +108,48 @@ public class ProductionForm extends javax.swing.JFrame {
             }
         });
 
+        BtnShowAllProduction.setText("Show All");
+        BtnShowAllProduction.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnShowAllProductionActionPerformed(evt);
+            }
+        });
+
+        BtnSearch.setText("Search");
+        BtnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnSearchActionPerformed(evt);
+            }
+        });
+
+        ProductionTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "productionId", "orderId", "qty", "status"
+            }
+        ));
+        jScrollPane1.setViewportView(ProductionTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnBack)
+                .addContainerGap(394, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
@@ -118,19 +161,21 @@ public class ProductionForm extends javax.swing.JFrame {
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtProductionID, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtOrderID, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(21, 21, 21)
                                         .addComponent(btnUpdate)
-                                        .addGap(59, 59, 59)
-                                        .addComponent(btnDelete))))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnBack)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnDelete)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(BtnShowAllProduction, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(BtnSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,79 +186,95 @@ public class ProductionForm extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtProductionID, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
+                    .addComponent(txtProductionID, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BtnShowAllProduction, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtOrderID, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnUpdate)
                     .addComponent(btnDelete))
-                .addGap(46, 46, 46))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        Production p = new Production();
-        p.setProductionId(Integer.parseInt(txtProductionID.getText()));
-        p.setOrderId(Integer.parseInt(txtOrderID.getText()));
-        p.setProductionQuantity(Integer.parseInt(txtQuantity.getText()));
-        p.setStatus(txtStatus.getText());
+        try {
+            Production p = new Production();
+            p.setProductionId(Integer.parseInt(txtProductionID.getText()));
+            p.setOrderId(Integer.parseInt(txtOrderID.getText()));
+            p.setProductionQuantity(Integer.parseInt(txtQuantity.getText()));
+            p.setStatus(txtStatus.getText());
 
-        ProductionService service = new ProductionService();
-        boolean result = service.saveProduction(p);
+            ProductionService service = new ProductionService();
+            boolean result = service.saveProduction(p);
 
-        JOptionPane.showMessageDialog(this,
-        result ? "Production Saved" : "Failed");
-        clearFields();
+            JOptionPane.showMessageDialog(this,
+                    result ? "Production Saved" : "Failed to Save");
+            clearFields();
+            loadProductionTable();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter valid numeric values");
+        } 
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-         try {
-        Production p = new Production();
-        p.setProductionId(Integer.parseInt(txtProductionID.getText()));
-        p.setOrderId(Integer.parseInt(txtOrderID.getText()));
-        p.setProductionQuantity(Integer.parseInt(txtQuantity.getText()));
-        p.setStatus(txtStatus.getText());
+          
+        try {
+            Production p = new Production();
+            p.setProductionId(Integer.parseInt(txtProductionID.getText()));
+            p.setOrderId(Integer.parseInt(txtOrderID.getText()));
+            p.setProductionQuantity(Integer.parseInt(txtQuantity.getText()));
+            p.setStatus(txtStatus.getText());
 
-        ProductionService service = new ProductionService();
-        boolean result = service.updateProduction(p);
+            ProductionService service = new ProductionService();
+            boolean result = service.updateProduction(p);
 
-        JOptionPane.showMessageDialog(this,
-                result ? "Production Updated Successfully" : "Failed to Update Production");
-        clearFields();
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-    }
+            JOptionPane.showMessageDialog(this,
+                    result ? "Production Updated Successfully" : "Failed to Update Production");
+            clearFields();
+            loadProductionTable();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter valid numeric values");
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        try {
-        int id = Integer.parseInt(txtProductionID.getText());
+      try {
+            if (txtProductionID.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Employee ID required for delete");
+                return;
+            }
+            int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this employee?");
+            if(confirm != JOptionPane.YES_OPTION) return;
+            int id = Integer.parseInt(txtProductionID.getText());
+            ProductionService service = new ProductionService();
+            boolean result = service.deleteProduction(id);
 
-        ProductionService service = new ProductionService();
-        boolean result = service.deleteProduction(id);
-
-        JOptionPane.showMessageDialog(this,result ? "Production Deleted Successfully" : "Failed to Delete Production");
-        clearFields();
-
-        } catch (Exception e) {
-          JOptionPane.showMessageDialog(this, "Please enter valid Production ID");
-      }
+            JOptionPane.showMessageDialog(this,
+                    result ? "Production Deleted Successfully" : "Failed to Delete Production");
+            clearFields();
+            loadProductionTable();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter valid Production ID");
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void txtOrderIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOrderIDActionPerformed
@@ -225,6 +286,34 @@ public class ProductionForm extends javax.swing.JFrame {
         dashboard.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void BtnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSearchActionPerformed
+               
+        try {
+            int id = Integer.parseInt(txtProductionID.getText());
+            ProductionService service = new ProductionService();
+            Production p = service.searchProductionById(id);
+            if (p != null) {
+                txtOrderID.setText(String.valueOf(p.getOrderId()));
+                txtQuantity.setText(String.valueOf(p.getProductionQuantity()));
+                txtStatus.setText(p.getStatus());
+            } else {
+                JOptionPane.showMessageDialog(this, "Production not found");
+                clearFields();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter valid Production ID");
+        }
+    }//GEN-LAST:event_BtnSearchActionPerformed
+
+    private void BtnShowAllProductionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnShowAllProductionActionPerformed
+        List <Production> list = service.getAllProductions();
+        loadOrderTable(list);
+    }//GEN-LAST:event_BtnShowAllProductionActionPerformed
+
+    private void txtQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQuantityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtQuantityActionPerformed
 
     /**
      * @param args the command line arguments
@@ -262,6 +351,9 @@ public class ProductionForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnSearch;
+    private javax.swing.JButton BtnShowAllProduction;
+    private javax.swing.JTable ProductionTable;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSave;
@@ -271,6 +363,7 @@ public class ProductionForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtOrderID;
     private javax.swing.JTextField txtProductionID;
     private javax.swing.JTextField txtQuantity;
@@ -282,5 +375,34 @@ public class ProductionForm extends javax.swing.JFrame {
         txtOrderID.setText("");
         txtQuantity.setText("");
         txtStatus.setText("");
+    }
+
+    private void loadOrderTable() {
+          
+        try {
+            ProductionService service = new ProductionService();
+            List<Production> list = service.getAllProductions();
+            DefaultTableModel model = (DefaultTableModel) ProductionTable.getModel();
+            model.setRowCount(0);
+
+            for (Production p : list) {
+                model.addRow(new Object[]{
+                    p.getProductionId(),
+                    p.getOrderId(),
+                    p.getProductionQuantity(),
+                    p.getStatus()
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error loading table: " + e.getMessage());
+        }
+    }
+
+    private void loadProductionTable() {
+        
+    }
+
+    private void loadOrderTable(List<Production> list) {
+       
     }
 }

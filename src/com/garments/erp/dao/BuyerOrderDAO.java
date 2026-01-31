@@ -8,50 +8,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BuyerOrderDAO {
-     // ::::::::::::::::::: Insert Order::::::::::::::
+
     public boolean addOrder(BuyerOrder order) {
-        String sql = "INSERT INTO buyer_order(order_id,buyer_name, product_name, quantity, order_date) VALUES (?, ?, ?, ?,?)";
+        String sql = "INSERT INTO buyer_order (order_id, buyer_name, product_name, quantity, order_date) VALUES (?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, order.getOrderId());
-            ps.setString(2, order.getBuyerName());
-            ps.setString(3, order.getProductName());
-            ps.setInt(4, order.getQuantity());
-            ps.setDate(5, new java.sql.Date(order.getOrderDate().getTime()));
-            return ps.executeUpdate() > 0;
+             PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setInt(1, order.getOrderId());
+            pst.setString(2, order.getBuyerName());
+            pst.setString(3, order.getProductName());
+            pst.setInt(4, order.getQuantity());
+            pst.setDate(5, new java.sql.Date(order.getOrderDate().getTime()));
+
+            return pst.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
-     // ::::::::::::::::::: Update Order::::::::::::::
+
     public boolean updateOrder(BuyerOrder order) {
         String sql = "UPDATE buyer_order SET buyer_name=?, product_name=?, quantity=?, order_date=? WHERE order_id=?";
         try (Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, order.getOrderId());
-            ps.setString(2, order.getBuyerName());
-            ps.setString(3, order.getProductName());
-            ps.setInt(4, order.getQuantity());
-            ps.setDate(5, new java.sql.Date(order.getOrderDate().getTime()));
-            ps.setInt(5, order.getOrderId());
+             PreparedStatement pst = con.prepareStatement(sql)) {
 
-            return ps.executeUpdate() > 0;
+            pst.setString(1, order.getBuyerName());
+            pst.setString(2, order.getProductName());
+            pst.setInt(3, order.getQuantity());
+            pst.setDate(4, new java.sql.Date(order.getOrderDate().getTime()));
+            pst.setInt(5, order.getOrderId());
 
+            return pst.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
-     // ::::::::::::::::::: Delete Order::::::::::::::
+
     public boolean deleteOrder(int orderId) {
         String sql = "DELETE FROM buyer_order WHERE order_id=?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement pst = con.prepareStatement(sql)) {
 
-            ps.setInt(1, orderId);
-            return ps.executeUpdate() > 0;
-
+            pst.setInt(1, orderId);
+            return pst.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -61,18 +61,19 @@ public class BuyerOrderDAO {
     public List<BuyerOrder> getAllOrders() {
         List<BuyerOrder> list = new ArrayList<>();
         String sql = "SELECT * FROM buyer_order";
+
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement pst = con.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
-                BuyerOrder order = new BuyerOrder();
-                order.setOrderId(rs.getInt("order_id"));
-                order.setBuyerName(rs.getString("buyer_name"));
-                order.setProductName(rs.getString("product_name"));
-                order.setQuantity(rs.getInt("quantity"));
-                order.setOrderDate(rs.getDate("order_date"));
-                list.add(order);
+                BuyerOrder o = new BuyerOrder();
+                o.setOrderId(rs.getInt("order_id"));
+                o.setBuyerName(rs.getString("buyer_name"));
+                o.setProductName(rs.getString("product_name"));
+                o.setQuantity(rs.getInt("quantity"));
+                o.setOrderDate(rs.getDate("order_date"));
+                list.add(o);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,3 +81,4 @@ public class BuyerOrderDAO {
         return list;
     }
 }
+

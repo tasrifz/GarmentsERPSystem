@@ -1,29 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.garments.erp.ui;
 
 import com.garments.erp.model.BuyerOrder;
 import com.garments.erp.service.BuyerOrderService;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author TASRIF ZAMAN
  */
 public class BuyerOrderForm extends javax.swing.JFrame {
-    private BuyerOrderService service = new BuyerOrderService();
+    DefaultTableModel model;
+    BuyerOrderService service = new BuyerOrderService();
 
     public BuyerOrderForm() {
         initComponents();
         setDatePlaceholder();
+        model = (DefaultTableModel) BuyerOrderTable.getModel();
+        loadOrderTable();
     }
     private void setDatePlaceholder() {
-    txtOrderDate.setText("DD.MM.YYYY");
+    txtOrderDate.setText("dd.MM.yyyy");
     txtOrderDate.setForeground(java.awt.Color.GRAY);
 }
 
@@ -52,6 +52,10 @@ public class BuyerOrderForm extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        btnshowAllBuyerOrder = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        BuyerOrderTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,6 +76,11 @@ public class BuyerOrderForm extends javax.swing.JFrame {
         jLabel2.setText("Buyer Name");
 
         txtBuyerName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtBuyerName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuyerNameActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Product Name");
@@ -136,44 +145,89 @@ public class BuyerOrderForm extends javax.swing.JFrame {
             }
         });
 
+        btnshowAllBuyerOrder.setText("Show All");
+        btnshowAllBuyerOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnshowAllBuyerOrderActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        BuyerOrderTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "OrderId", "BuyerName", "ProductName", "Qty", "OrderDate"
+            }
+        ));
+        jScrollPane1.setViewportView(BuyerOrderTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtquantity, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtOrderDate, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtBuyerName, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtOrderId, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtOrderId, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(btnUpdate)
-                                        .addGap(43, 43, 43))
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtBuyerName, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(97, 97, 97)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnshowAllBuyerOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(btnSave)
+                                    .addGap(73, 73, 73)
+                                    .addComponent(btnUpdate)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnDelete))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(11, 11, 11)
-                                        .addComponent(btnSave)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addComponent(btnDelete)
-                                .addGap(33, 33, 33))))
-                    .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(43, Short.MAX_VALUE))
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtOrderDate, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtquantity, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(42, 42, 42)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,32 +236,40 @@ public class BuyerOrderForm extends javax.swing.JFrame {
                 .addComponent(btnBack)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtOrderId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtOrderId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(btnshowAllBuyerOrder)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBuyerName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBuyerName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtquantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtquantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtOrderDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(97, 97, 97)
+                    .addComponent(txtOrderDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnUpdate)
                     .addComponent(btnDelete))
-                .addGap(65, 65, 65))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
@@ -220,63 +282,78 @@ public class BuyerOrderForm extends javax.swing.JFrame {
     private void txtquantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtquantityActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtquantityActionPerformed
+        // ::::::::::::::::::::::::DELETE ::::::::::::::::::::::::::::
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        
         try {
-        int orderId = Integer.parseInt(txtOrderId.getText());
-
-        boolean result = service.deleteOrder(orderId);
-        JOptionPane.showMessageDialog(this, result ? "Order Deleted Successfully" : "Failed to Delete Order");
-        clearFields();
-    } catch (NumberFormatException nfe) {
-        JOptionPane.showMessageDialog(this, "Please enter a valid numeric Order ID");
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        e.printStackTrace();
-    }
+            if (txtOrderId.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Employee ID required for delete");
+                return;
+            }
+            int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this employee?");
+            if(confirm != JOptionPane.YES_OPTION) return;
+            int orderId = Integer.parseInt(txtOrderId.getText());
+            if (service.deleteOrder(orderId)) {
+                JOptionPane.showMessageDialog(this, "Order deleted successfully");
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to delete order");
+            }
+            clearFields();
+            loadOrderTable();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid Order ID");
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
-
+    // ::::::::::::::::::::::::SAVE ::::::::::::::::::::::::::::
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+            
         try {
-        BuyerOrder order = new BuyerOrder();
-        order.setOrderId(Integer.parseInt(txtOrderId.getText().trim()));
-        order.setBuyerName(txtBuyerName.getText().trim());
-        order.setProductName(txtProductName.getText().trim());
-        order.setQuantity(Integer.parseInt(txtquantity.getText().trim()));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        order.setOrderDate(sdf.parse(txtOrderDate.getText().trim()));
+            BuyerOrder order = new BuyerOrder();
+            order.setOrderId(Integer.parseInt(txtOrderId.getText()));
+            order.setBuyerName(txtBuyerName.getText());
+            order.setProductName(txtProductName.getText());
+            order.setQuantity(Integer.parseInt(txtquantity.getText()));
 
-        boolean result = service.addOrder(order);
-        JOptionPane.showMessageDialog(this,result ? "Order Saved Successfully" : "Failed to Save Order");
-        clearFields();
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Order ID and Quantity must be numbers");
-    } catch (java.text.ParseException e) {
-        JOptionPane.showMessageDialog(this, "Date format must be dd.MM.yyyy (example: 23.01.2026)");
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        e.printStackTrace();
-    }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+            order.setOrderDate(sdf.parse(txtOrderDate.getText()));
+
+            if (service.addOrder(order)) {
+                JOptionPane.showMessageDialog(this, "Order saved successfully");
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to save order");
+            }
+            clearFields();
+            loadOrderTable();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid input");
+          }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-       try {
-        BuyerOrder order = new BuyerOrder();
-        order.setOrderId(Integer.parseInt(txtOrderId.getText()));
-        order.setBuyerName(txtBuyerName.getText());
-        order.setProductName(txtProductName.getText());
-        order.setQuantity(Integer.parseInt(txtquantity.getText()));
-        order.setOrderDate(new SimpleDateFormat("yyyy-MM-dd").parse(txtOrderDate.getText()));
-        boolean result = service.updateOrder(order);
+            
+        try {
+            BuyerOrder order = new BuyerOrder();
+            order.setOrderId(Integer.parseInt(txtOrderId.getText()));
+            order.setBuyerName(txtBuyerName.getText());
+            order.setProductName(txtProductName.getText());
+            order.setQuantity(Integer.parseInt(txtquantity.getText()));
 
-        JOptionPane.showMessageDialog(this, result ? "Order Updated Successfully" : "Failed to Update Order");
-        clearFields();
-    } catch (NumberFormatException nfe) {
-        JOptionPane.showMessageDialog(this, "Please enter valid numeric values for Order ID and Quantity");
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        e.printStackTrace();
-    }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+            order.setOrderDate(sdf.parse(txtOrderDate.getText()));
+
+            if (service.updateOrder(order)) {
+                JOptionPane.showMessageDialog(this, "Order updated successfully");
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to update order");
+            }
+            clearFields();
+            loadOrderTable();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid input");
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void txtOrderDateFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderDateFocusGained
@@ -298,6 +375,38 @@ public class BuyerOrderForm extends javax.swing.JFrame {
         dashboard.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnshowAllBuyerOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnshowAllBuyerOrderActionPerformed
+        List <BuyerOrder> list = service.viewOrders();
+        loadOrderTable(list);
+    }//GEN-LAST:event_btnshowAllBuyerOrderActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+          
+        try {
+            if(txtOrderId.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Employee ID required for search");
+                return;
+            }
+            int orderId = Integer.parseInt(txtOrderId.getText());
+            for (BuyerOrder o : service.viewOrders()) {
+                if (o.getOrderId() == orderId) {
+                    txtBuyerName.setText(o.getBuyerName());
+                    txtProductName.setText(o.getProductName());
+                    txtquantity.setText(String.valueOf(o.getQuantity()));
+                    txtOrderDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(o.getOrderDate()));
+                    return;
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Order not found");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid Order ID");
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void txtBuyerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuyerNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuyerNameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -336,15 +445,19 @@ public class BuyerOrderForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable BuyerOrderTable;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton btnshowAllBuyerOrder;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField txtBuyerName;
     private javax.swing.JTextField txtOrderDate;
@@ -360,5 +473,25 @@ public class BuyerOrderForm extends javax.swing.JFrame {
     txtquantity.setText("");
     txtOrderDate.setText("");
     txtOrderId.requestFocus(); 
+    }
+
+    private void loadOrderTable() {
+        model.setRowCount(0);
+        List<BuyerOrder> orders = service.viewOrders();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+
+        for (BuyerOrder o : orders) {
+            model.addRow(new Object[]{
+                o.getOrderId(),
+                o.getBuyerName(),
+                o.getProductName(),
+                o.getQuantity(),
+                sdf.format(o.getOrderDate())
+            });
+        } 
+    }
+
+    private void loadOrderTable(List<BuyerOrder> list) {
+    
     }
 }

@@ -1,25 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.garments.erp.ui;
 
 import com.garments.erp.model.Inventory;
 import com.garments.erp.service.InventoryService;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author TASRIF ZAMAN
  */
 public class InventoryForm extends javax.swing.JFrame {
-
-    /**
-     * Creates new form InventoryForm
-     */
+    DefaultTableModel model;
+    InventoryService service = new InventoryService();
     public InventoryForm() {
         initComponents();
+        model = (DefaultTableModel) InventoryTable.getModel();
+        loadInventoryTable();
     }
 
     /**
@@ -35,8 +32,6 @@ public class InventoryForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtItemId = new javax.swing.JTextField();
-        txtItemName = new javax.swing.JLabel();
-        txtItemId1 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtQuantity = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -45,6 +40,12 @@ public class InventoryForm extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        InventoryTable = new javax.swing.JTable();
+        BtnShowAllInventory = new javax.swing.JButton();
+        BtnSearch = new javax.swing.JButton();
+        txtItemName = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         jLabel2.setText("jLabel2");
 
@@ -55,9 +56,13 @@ public class InventoryForm extends javax.swing.JFrame {
 
         jLabel3.setText("Item Id");
 
-        txtItemName.setText("Item Name");
-
         jLabel5.setText("Quantity");
+
+        txtQuantity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtQuantityActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("Type");
 
@@ -96,6 +101,35 @@ public class InventoryForm extends javax.swing.JFrame {
             }
         });
 
+        InventoryTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "itemId", "itemName", "qty", "type"
+            }
+        ));
+        jScrollPane1.setViewportView(InventoryTable);
+
+        BtnShowAllInventory.setText("Show All");
+        BtnShowAllInventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnShowAllInventoryActionPerformed(evt);
+            }
+        });
+
+        BtnSearch.setText("Search");
+        BtnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnSearchActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Item Name");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -103,29 +137,47 @@ public class InventoryForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnBack))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnSave)
+                                .addGap(73, 73, 73)
+                                .addComponent(btnUpdate)
+                                .addGap(71, 71, 71)
+                                .addComponent(btnDelete))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtType, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnSave)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtItemName, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(30, 30, 30)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtType, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnUpdate)
-                                        .addGap(53, 53, 53)
-                                        .addComponent(btnDelete))
-                                    .addComponent(txtItemId1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtItemId, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnBack)))
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtItemId, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+                                                .addGap(18, 18, 18))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGap(18, 18, 18)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtItemName, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(33, 33, 33)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(BtnShowAllInventory)
+                                    .addComponent(BtnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -133,51 +185,46 @@ public class InventoryForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnBack)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtItemId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addComponent(BtnShowAllInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(BtnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtItemId, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtItemName, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtItemName, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtItemId1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtQuantity, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtType))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnUpdate)
                     .addComponent(btnDelete))
-                .addGap(35, 35, 35))
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    //::::::::::::::::::::::: SAVE::::::::::::::::::::::
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-    Inventory i = new Inventory();
-    i.setIteamId(Integer.parseInt(txtItemId.getText()));
-    i.setIteamName(txtItemName.getText());
-    i.setQuantity(Integer.parseInt(txtQuantity.getText()));
-    i.setType(txtType.getText());
-
-    InventoryService service = new InventoryService();
-    boolean result = service.saveItem(i);
-
-    JOptionPane.showMessageDialog(this,
-        result ? "Item Saved" : "Failed");
-    clearFields();
-    }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+            
         try {
         Inventory i = new Inventory();
         i.setIteamId(Integer.parseInt(txtItemId.getText()));
@@ -185,32 +232,80 @@ public class InventoryForm extends javax.swing.JFrame {
         i.setQuantity(Integer.parseInt(txtQuantity.getText()));
         i.setType(txtType.getText());
 
-        InventoryService service = new InventoryService();
-        boolean result = service.updateItem(i);
+        if (service.saveItem(i)) {
+            JOptionPane.showMessageDialog(this, "Item Saved Successfully");
+            clearFields();
+            loadInventoryTable();
+        } else {
+            JOptionPane.showMessageDialog(this, "Failed to Save Item");
+        }
 
-        JOptionPane.showMessageDialog(this,
-                result ? "Inventory Updated Successfully" : "Failed to Update Inventory");
-        clearFields();
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Please enter valid numeric values");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }   
+    }//GEN-LAST:event_btnSaveActionPerformed
+   //::::::::::::::::::::::: UPDATE ::::::::::::::::::::::
 
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+           try {
+        if (txtItemId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Item ID required for update");
+            return;
+        }
+
+        Inventory i = new Inventory();
+        i.setIteamId(Integer.parseInt(txtItemId.getText()));
+        i.setIteamName(txtItemName.getText());
+        i.setQuantity(Integer.parseInt(txtQuantity.getText()));
+        i.setType(txtType.getText());
+
+        if (service.updateItem(i)) {
+            JOptionPane.showMessageDialog(this, "Item Updated Successfully");
+            clearFields();
+            loadInventoryTable();
+        } else {
+            JOptionPane.showMessageDialog(this, "Failed to Update Item");
+        }
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Invalid number format");
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
     }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        
         try {
+            if (txtItemId.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Item ID required for delete");
+                return;
+            }
+            int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this employee?");
+            
+            if(confirm != JOptionPane.YES_OPTION) return;
+        if (txtItemId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Item ID required for delete");
+            return;
+        }
+
         int id = Integer.parseInt(txtItemId.getText());
 
-        InventoryService service = new InventoryService();
-        boolean result = service.deleteItem(id);
-
-        JOptionPane.showMessageDialog(this,
-                result ? "Inventory Deleted Successfully" : "Failed to Delete Inventory");
-        clearFields();
-
-        } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Please enter valid Item ID");
+        if (service.deleteItem(id)) {
+            JOptionPane.showMessageDialog(this, "Item Deleted Successfully");
+            clearFields();
+            loadInventoryTable();
+        } else {
+            JOptionPane.showMessageDialog(this, "Failed to Delete Item");
         }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid Item ID");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+      }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -218,6 +313,40 @@ public class InventoryForm extends javax.swing.JFrame {
         dashboard.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void txtQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQuantityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtQuantityActionPerformed
+
+    private void BtnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSearchActionPerformed
+        
+        try {
+        if (txtItemId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Item ID required for search");
+            return;
+        }
+
+        int itemId = Integer.parseInt(txtItemId.getText());
+        Inventory i = service.searchInventoryByID(itemId); 
+
+        if (i != null) {
+            txtItemName.setText(i.getIteamName());
+            txtQuantity.setText(String.valueOf(i.getQuantity()));
+            txtType.setText(i.getType());
+        } else {
+            JOptionPane.showMessageDialog(this, "Inventory item not found");
+        }
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid Item ID");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+    }
+    }//GEN-LAST:event_BtnSearchActionPerformed
+
+    private void BtnShowAllInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnShowAllInventoryActionPerformed
+        loadInventoryTable();
+    }//GEN-LAST:event_BtnShowAllInventoryActionPerformed
 
     /**
      * @param args the command line arguments
@@ -255,6 +384,9 @@ public class InventoryForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnSearch;
+    private javax.swing.JButton BtnShowAllInventory;
+    private javax.swing.JTable InventoryTable;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSave;
@@ -262,11 +394,12 @@ public class InventoryForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtItemId;
-    private javax.swing.JTextField txtItemId1;
-    private javax.swing.JLabel txtItemName;
+    private javax.swing.JTextField txtItemName;
     private javax.swing.JTextField txtQuantity;
     private javax.swing.JTextField txtType;
     // End of variables declaration//GEN-END:variables
@@ -276,5 +409,18 @@ public class InventoryForm extends javax.swing.JFrame {
         txtItemName.setText("");
         txtQuantity.setText("");
         txtType.setText("");
+    }
+
+    private void loadInventoryTable() {
+        model.setRowCount(0);
+        List<Inventory> items = service.getAllInventory();
+        for(Inventory i : items) {
+            model.addRow(new Object[]{
+                i.getIteamId(),
+                i.getIteamName(),
+                i.getQuantity(),
+                i.getType()
+            });
+        }
     }
 }

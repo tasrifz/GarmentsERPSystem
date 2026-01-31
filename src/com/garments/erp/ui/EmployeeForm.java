@@ -3,14 +3,20 @@ package com.garments.erp.ui;
 
 import com.garments.erp.model.Employee;
 import com.garments.erp.service.EmployeeService;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 
 public class EmployeeForm extends javax.swing.JFrame {
-
+    
+    DefaultTableModel model;
+    EmployeeService service = new EmployeeService();
     
     public EmployeeForm() {
         initComponents();
+        model = (DefaultTableModel) EmployeeTable.getModel();
+        loadEmployeeTable();
     }
 
     
@@ -31,6 +37,10 @@ public class EmployeeForm extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        EmployeeTable = new javax.swing.JTable();
+        showAllEmployees = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,130 +94,188 @@ public class EmployeeForm extends javax.swing.JFrame {
             }
         });
 
+        EmployeeTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "empId", "empName", "department", "salary"
+            }
+        ));
+        jScrollPane1.setViewportView(EmployeeTable);
+
+        showAllEmployees.setText("Show All");
+        showAllEmployees.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showAllEmployeesActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSave)
-                        .addGap(31, 31, 31)
-                        .addComponent(btnUpdate)
-                        .addGap(28, 28, 28)
-                        .addComponent(btnDelete))
+                        .addGap(6, 6, 6)
+                        .addComponent(btnBack)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnSave)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnUpdate)
+                                .addGap(61, 61, 61)
+                                .addComponent(btnDelete))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtEmpId, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtEmpId, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtEmpName, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(btnBack)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(showAllEmployees)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtEmpName, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addComponent(btnSearch)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(64, 64, 64)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBack))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEmpId, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEmpName, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(txtEmpId, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(showAllEmployees, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                    .addComponent(txtEmpName, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave)
+                    .addComponent(txtDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(78, 78, 78)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDelete)
                     .addComponent(btnUpdate)
-                    .addComponent(btnDelete))
-                .addGap(26, 26, 26))
+                    .addComponent(btnSave))
+                .addGap(36, 36, 36)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2090, 2090, 2090))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // ::::::::: Save Button::::::::
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if (txtEmpId.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Employee ID is required");
-            return;
+          try {
+            if (txtEmpId.getText().isEmpty() || txtEmpName.getText().isEmpty() ||
+                    txtDepartment.getText().isEmpty() || txtSalary.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "All fields are required");
+                return;
+            }
+
+            Employee emp = new Employee();
+            emp.setEmpId(Integer.parseInt(txtEmpId.getText()));
+            emp.setEmpName(txtEmpName.getText());
+            emp.setDepartment(txtDepartment.getText());
+            emp.setSalary(Double.parseDouble(txtSalary.getText()));
+
+            if(service.addEmployee(emp)) {
+                JOptionPane.showMessageDialog(this, "Employee added successfully");
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to add employee");
+            }
+            clearFields();
+            loadEmployeeTable();
+            } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid number format");
         }
-
-        Employee emp = new Employee();
-        emp.setEmpId(Integer.parseInt(txtEmpId.getText()));
-        emp.setEmpName(txtEmpName.getText());
-        emp.setDepartment(txtDepartment.getText());
-        emp.setSalary(Double.parseDouble(txtSalary.getText()));
-
-        EmployeeService service = new EmployeeService();
-        boolean status = service.addEmployee(emp);
-
-        if (status) JOptionPane.showMessageDialog(this, "Employee Added Successfully");
-        else JOptionPane.showMessageDialog(this, "Failed to Add Employee");
-
-        clearFields();
     }//GEN-LAST:event_btnSaveActionPerformed
     // ::::::: Update Button:::::::
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-         if (txtEmpId.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Employee ID is required for update");
-            return;
+         try {
+            if (txtEmpId.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Employee ID required for update");
+                return;
+            }
+            Employee emp = new Employee();
+            emp.setEmpId(Integer.parseInt(txtEmpId.getText()));
+            emp.setEmpName(txtEmpName.getText());
+            emp.setDepartment(txtDepartment.getText());
+            emp.setSalary(Double.parseDouble(txtSalary.getText()));
+
+            if(service.updateEmployee(emp)) {
+                JOptionPane.showMessageDialog(this, "Employee updated successfully");
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to update employee");
+            }
+            clearFields();
+            loadEmployeeTable();
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid number format");
         }
-        Employee emp = new Employee();
-        emp.setEmpId(Integer.parseInt(txtEmpId.getText()));
-        emp.setEmpName(txtEmpName.getText());
-        emp.setDepartment(txtDepartment.getText());
-        emp.setSalary(Double.parseDouble(txtSalary.getText()));
-
-        EmployeeService service = new EmployeeService();
-        boolean status = service.updateEmployee(emp);
-
-        if (status) JOptionPane.showMessageDialog(this, "Employee Updated Successfully");
-        else JOptionPane.showMessageDialog(this, "Failed to Update Employee");
-
-        clearFields();
     }//GEN-LAST:event_btnUpdateActionPerformed
     
     // :::::::: Delete Button:::::::::
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        if (txtEmpId.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Employee ID is required for delete");
-            return;
+          try {
+            if (txtEmpId.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Employee ID required for delete");
+                return;
+            }
+            int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete this employee?");
+            if(confirm != JOptionPane.YES_OPTION) return;
+
+            int empId = Integer.parseInt(txtEmpId.getText());
+            if(service.deleteEmployee(empId)) {
+                JOptionPane.showMessageDialog(this, "Employee deleted successfully");
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to delete employee");
+            }
+            clearFields();
+            loadEmployeeTable();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid number format");
         }
-
-        int empId = Integer.parseInt(txtEmpId.getText());
-        EmployeeService service = new EmployeeService();
-        boolean status = service.deleteEmployee(empId);
-
-        if (status) JOptionPane.showMessageDialog(this, "Employee Deleted Successfully");
-        else JOptionPane.showMessageDialog(this, "Failed to Delete Employee");
-
-        clearFields();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -215,6 +283,35 @@ public class EmployeeForm extends javax.swing.JFrame {
             dashboard.setVisible(true);
             this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void showAllEmployeesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showAllEmployeesActionPerformed
+        List<Employee> list = service.viewEmployees();
+        loadEmployeeTable(list);
+    }//GEN-LAST:event_showAllEmployeesActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        try {
+            if(txtEmpId.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Employee ID required for search");
+                return;
+            }
+            int empId = Integer.parseInt(txtEmpId.getText());
+            List<Employee> result = service.viewEmployees();
+            boolean found = false;
+            for(Employee emp : result) {
+                if(emp.getEmpId() == empId) {
+                    txtEmpName.setText(emp.getEmpName());
+                    txtDepartment.setText(emp.getDepartment());
+                    txtSalary.setText(String.valueOf(emp.getSalary()));
+                    found = true;
+                    break;
+                }
+            }
+            if(!found) JOptionPane.showMessageDialog(this, "Employee not found");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid number format");
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
 
     /**
      * @param args the command line arguments
@@ -252,15 +349,19 @@ public class EmployeeForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable EmployeeTable;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton showAllEmployees;
     private javax.swing.JTextField txtDepartment;
     private javax.swing.JTextField txtEmpId;
     private javax.swing.JTextField txtEmpName;
@@ -273,4 +374,27 @@ public class EmployeeForm extends javax.swing.JFrame {
         txtDepartment.setText("");
         txtSalary.setText("");
     }
-}
+
+    
+
+    private void loadEmployeeTable() {
+        model.setRowCount(0);
+        List<Employee> employees = service.viewEmployees();
+        for(Employee emp : employees) {
+        model.addRow(new Object[]{
+            emp.getEmpId(), 
+            emp.getEmpName(), 
+            emp.getDepartment(), 
+            emp.getSalary()});
+        }
+    }
+
+    private void loadEmployeeTable(List<Employee> list) {
+        //To change body of generated methods, choose Tools | Templates.
+    }
+
+ }
+
+    
+
+    

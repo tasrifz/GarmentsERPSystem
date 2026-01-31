@@ -26,4 +26,8 @@ public class EmployeeService {
     public List<Employee> viewEmployees() {
         return employeeDAO.getAllEmployees();
     }
+
+    public List<Employee> searchEmployeeByName(String name) {
+        return employeeDAO.searchEmployee(name);
+    }
 }
