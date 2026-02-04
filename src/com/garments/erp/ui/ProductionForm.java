@@ -130,7 +130,7 @@ public class ProductionForm extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "productionId", "orderId", "qty", "status"
+                "production_id", "order_id", "qty", "status"
             }
         ));
         jScrollPane1.setViewportView(ProductionTable);
@@ -190,10 +190,11 @@ public class ProductionForm extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(BtnShowAllProduction, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtOrderID, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BtnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BtnSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtOrderID, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -307,8 +308,12 @@ public class ProductionForm extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnSearchActionPerformed
 
     private void BtnShowAllProductionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnShowAllProductionActionPerformed
-        List <Production> list = service.getAllProductions();
+        List<Production> list = service.getAllProductions();
+    if(list != null && !list.isEmpty()){
         loadOrderTable(list);
+    } else {
+        JOptionPane.showMessageDialog(this, "No production data found");
+    }
     }//GEN-LAST:event_BtnShowAllProductionActionPerformed
 
     private void txtQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQuantityActionPerformed
@@ -377,32 +382,29 @@ public class ProductionForm extends javax.swing.JFrame {
         txtStatus.setText("");
     }
 
-    private void loadOrderTable() {
-          
-        try {
-            ProductionService service = new ProductionService();
-            List<Production> list = service.getAllProductions();
-            DefaultTableModel model = (DefaultTableModel) ProductionTable.getModel();
-            model.setRowCount(0);
-
-            for (Production p : list) {
-                model.addRow(new Object[]{
-                    p.getProductionId(),
-                    p.getOrderId(),
-                    p.getProductionQuantity(),
-                    p.getStatus()
-                });
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error loading table: " + e.getMessage());
-        }
-    }
+    
 
     private void loadProductionTable() {
         
     }
 
-    private void loadOrderTable(List<Production> list) {
-       
+   
+       private void loadOrderTable(List<Production> list) {
+    DefaultTableModel model = (DefaultTableModel) ProductionTable.getModel();
+    model.setRowCount(0); 
+
+    for (Production p : list) {
+        model.addRow(new Object[]{
+            p.getProductionId(),
+            p.getOrderId(),
+            p.getProductionQuantity(),
+            p.getStatus()
+        });
+    }
+  }
+
+    private void loadOrderTable() {
+        
     }
 }
+

@@ -207,7 +207,7 @@ public class EmployeeForm extends javax.swing.JFrame {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
           try {
             if (txtEmpId.getText().isEmpty() || txtEmpName.getText().isEmpty() ||
-                    txtDepartment.getText().isEmpty() || txtSalary.getText().isEmpty()) {
+                txtDepartment.getText().isEmpty() || txtSalary.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "All fields are required");
                 return;
             }

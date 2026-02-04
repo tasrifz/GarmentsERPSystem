@@ -67,7 +67,7 @@ public class ProductionDAO {
                 Production p = new Production();
                 p.setProductionId(rs.getInt("production_id"));
                 p.setOrderId(rs.getInt("order_id"));
-                p.setProductionQuantity(rs.getInt("production_quantity"));
+                p.setProductionQuantity(rs.getInt("qty"));
                 p.setStatus(rs.getString("status"));
                 return p;
             }
